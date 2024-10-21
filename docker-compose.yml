@@ -1,0 +1,31 @@
+version: '3.4'
+services:
+  mktest:
+    image: react-imgs
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - NEXT_PUBLIC_NODE_SERVER=${SERVER_1}
+    expose:
+      - "3000"
+
+  mktestss:
+    image: react-imgs
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - NEXT_PUBLIC_NODE_SERVER=${SERVER_2}
+    expose:
+      - "3001"
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    depends_on:
+      - mktest
+      - mktestss
+    ports:
+      - "4002:4002"
